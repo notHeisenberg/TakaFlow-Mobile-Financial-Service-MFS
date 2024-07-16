@@ -1,5 +1,7 @@
+const withMT = require("@material-tailwind/html/utils/withMT");
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+module.exports = withMT({
   darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx}',
@@ -73,5 +75,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),require('daisyui'),],
-}
+  plugins: [require("tailwindcss-animate"), require('daisyui'),],
+});
