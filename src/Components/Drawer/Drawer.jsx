@@ -1,3 +1,4 @@
+import logout from '@/Hooks/Logout';
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
@@ -6,10 +7,10 @@ const Drawer = () => {
     const active = "bg-blue-400 text-yellow-300 font-xl border border-blue-400";
     const inactive = "text-blue-400 hover:bg-blue-400 hover:text-yellow-300";
 
-    const userType = "user";
+    const userType = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).role : "";
 
     const dashboardItems = <>
-        <ul className="menu bg-slate-300 min-h-full w-80 h-screen p-4">
+        <ul className="menu bg-inherit min-h-full w-80 h-screen p-4">
             <li>
                 <NavLink to={`/dashboard/${userType}-profile`} className={({ isActive }) => isActive ? active : inactive}>
                     {userType === "user" ? "User" : userType === "agent" ? "Agent" : "Admin"} Profile
@@ -72,7 +73,7 @@ const Drawer = () => {
                 </NavLink>
             </li>
             <li>
-                <NavLink to={`/logout`} className="text-red-400 font-bold hover:bg-red-400 hover:text-yellow-300">
+                <NavLink to={`/logout`} onClick={() => logout()} className="text-red-400 font-bold hover:bg-red-400 hover:text-yellow-300">
                     Logout
                 </NavLink>
             </li>
@@ -80,33 +81,28 @@ const Drawer = () => {
     </>
 
     return (
-        <div className="drawer flex">
+        <div className="drawe flex h-screen bg-gray-200">
             <div>
                 {/* Hamburger menu for small devices */}
-                <div className={`md:hidden p-4 bg-slate-300 ${!isOpen && 'bg-inherit'}`}>
-                    <button htmlFor="my-drawer-3" className="btn btn-square btn-ghost" onClick={() => setIsOpen(!isOpen)}>
+                <div className={`md:hidden p-2 bg-blue-gray-700  ${!isOpen && 'bg-inherit'}`}>
+                    <button htmlFor="my-drawer-3" className="btn btn-square btn-ghost top-0" onClick={() => setIsOpen(!isOpen)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block h-6 w-6 stroke-current">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-16 6h16"></path>
                         </svg>
                     </button>
                 </div>
                 {/* Adjusted className to ensure drawer content is visible on large screens */}
-                <div className={`drawer-content flex flex-col ${isOpen ? 'lg:flex' : 'hidden lg:flex'}`}>
-
+                <div className={`drawer-content bg-blue-gray-700 flex flex-col ${isOpen ? 'lg:flex' : 'hidden lg:flex'}`}>
                     {dashboardItems}
-
                 </div>
                 {/* New div for md and larger devices */}
                 <div className="hidden md:block drawer-content lg:flex flex-col">
-
                     {dashboardItems}
+                </div>
 
-                </div>
             </div>
-            <div>
-                <div className="content">
-                    <Outlet></Outlet>
-                </div>
+            <div className=" p-4">
+                <Outlet></Outlet>
             </div>
         </div>
     );

@@ -1,9 +1,10 @@
+import logout from "@/Hooks/Logout";
 import { Link } from "react-router-dom";
 
 
 const Navbar = () => {
-    const userType = "user";
-    const user = true;
+    const userType = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).role : "";
+    const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
     return (
         <div className="navbar bg-state-300 border-b shadow-lg">
             <div className="flex-1">
@@ -26,10 +27,10 @@ const Navbar = () => {
                             <li>
                                 <Link to={`/dashboard/${userType}-profile`} className="justify-between">
                                     Dashboard
-                                    <span className="badge">New</span>
+                                    <span className="badge badge-neutral">{userType}</span>
                                 </Link>
                             </li>
-                            <li><Link to={`/logout`}>Logout</Link></li>
+                            <li><Link onClick={() => logout()}>Logout</Link></li>
                         </ul>
                     </div>
                 }

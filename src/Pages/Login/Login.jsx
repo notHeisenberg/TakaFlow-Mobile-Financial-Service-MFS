@@ -31,15 +31,14 @@ const Login = () => {
             emailOrPhone: emailOrPhone,
             pin: parseInt(pin),
         }
-        console.log(userInfo)
+        // console.log(userInfo)
 
         axiossecure.post('/login', userInfo)
             .then((response) => {
-                console.log(response.data)
+                // console.log(response.data)
                 if (response.data.status === "success") {
                     localStorage.setItem('access-token', response.data.token)
                     localStorage.setItem('user', JSON.stringify(response.data.user))
-                    localStorage.setItem('role', response.data.user.role)
                     if (response.data.user.role === 'admin') {
                         navigate('/dashboard/admin-profile')
                     } else if (response.data.user.role === 'agent') {
