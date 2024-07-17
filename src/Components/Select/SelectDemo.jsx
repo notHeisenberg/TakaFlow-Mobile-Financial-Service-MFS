@@ -13,7 +13,7 @@ import {
 
 export function SelectDemo({ setSelectedRole }) {
     return (
-        <Select onValueChange={(value) => { setSelectedRole(value) }}>
+        <Select required onValueChange={(value) => { setSelectedRole(value) }}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select Role" />
             </SelectTrigger>

@@ -5,21 +5,15 @@ import {
     Typography,
 
 } from "@material-tailwind/react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoIosArrowBack } from "react-icons/io";
 import { Link } from "react-router-dom";
-// import { updateProfile } from "firebase/auth";
-// import { AuthContext } from "@/components/Provider/AuthProvider";
-// import axiosPublic from "@/utilities/useAxiosPublic";
 import { SelectDemo } from "@/Components/Select/SelectDemo";
 
 import Swal from "sweetalert2";
-
-
-
-
+import axiosPublic from "@/Utilities/useAxiosPublic";
 
 
 
@@ -28,8 +22,8 @@ const SignUp = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNum, setPhoneNum] = useState("");
-    const [selectedRole, setSelectedRole] = useState('');
-    const [pin, setPin] = useState(false)
+    const [selectedRole, setSelectedRole] = useState('user');
+    const [pin, setPin] = useState('')
 
 
     // const { signUp } = useContext(AuthContext)
@@ -74,70 +68,50 @@ const SignUp = () => {
             phoneNum: phoneNum,
             role: selectedRole,
             pin: pin,
+            photoUrl: "https://gravatar.com/avatar/646c21006665037c64d3af52c254fc3f?s=400&d=robohash&r=x",
+            createdAt: new Date().toUTCString(),
+            approvedBy: "",
         }
-        console.log(userInfo)
+        // console.log(userInfo)
 
-        // signUp(email, password)
-        //     .then((result) => {
+        axiosPublic.post('/register', userInfo)
+            .then(res => {
+                console.log(res.data);
+                if (res.data.insertedId) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'success',
+                        title: 'User created successfully.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+                toast.success(
+                    <>
+                        Registration successful! Please wait for admin approval.
+                        <Link to="/login" className="btn btn-sm bg-slate-200 text-center font-medium text-green-500 hover:text-blue-500">
+                            <button className="">Log In
+                            </button>
+                        </Link>
+                    </>
+                );
+            }
+            ).catch(error => {
+                console.log(error)
+                if (error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                }
+                else if (error.response.status === 500) {
+                    toast.error(error.response.data.message)
+                }
+            })
 
-        //         const userInfo = {
-        //             email: result.user.email,
-        //             userName: name,
-        //             photoURL: photoURL,
-        //             role: selectedRole,
-        //             createdAt: result.user.metadata.createdAt,
-        //             lastLoginAt: result.user.metadata.lastLoginAt
-        //         }
-        //         // console.log(userInfo)
-        //         axiosPublic.post('/users', userInfo)
-        //             .then(res => {
-        //                 console.log(res.data);
-        //                 if (res.data.insertedId) {
-        //                     Swal.fire({
-        //                         position: 'top',
-        //                         icon: 'success',
-        //                         title: 'User created successfully.',
-        //                         showConfirmButton: false,
-        //                         timer: 1500
-        //                     });
-        //                 }
-        //             })
-
-        //         toast.success(
-        //             <>
-        //                 Account created succesfully
-        //                 <Link to="/login" className="btn btn-sm bg-slate-200 text-center font-medium text-green-500 hover:text-blue-500">
-        //                     <button className="">Log In
-        //                     </button>
-        //                 </Link>
-        //             </>
-        //         )
-        //         updateProfile(result.user,
-        //             {
-        //                 displayName: name,
-        //                 photoURL: photoURL
-        //             })
-        //         // sendEmailVerification(result.user)
-        //         // .then(toast.success("Verification email sent"))
-        //     })
-
-        //     .catch(error => {
-        //         if (error.code === "auth/email-already-in-use") {
-        //             toast.error("Email already in use")
-        //         }
-        //         else if (error.code === "auth/invalid-email") {
-        //             toast.error("Invalid email. Please provide a valid email")
-        //         }
-        //     }
-        //     )
-
-        toast.success('Registration successful! Please wait for admin approval.');
 
         setName("")
         setEmail("")
         setPin("")
         setPhoneNum("")
-        setSelectedRole("")
+        setSelectedRole("user")
 
 
     };

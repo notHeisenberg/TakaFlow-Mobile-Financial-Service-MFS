@@ -5,27 +5,24 @@ import {
     Typography,
 
 } from "@material-tailwind/react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoIosArrowBack } from "react-icons/io";
-import { Link } from "react-router-dom";
-// import { updateProfile } from "firebase/auth";
-// import { AuthContext } from "@/components/Provider/AuthProvider";
-// import axiosPublic from "@/utilities/useAxiosPublic";
-
+import { Link, useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
+import useAxiosSecure from "@/Utilities/useAxiosSecure";
 
 
 const Login = () => {
 
 
     const [emailOrPhone, setEmailOrPhone] = useState("");
-    const [pin, setPin] = useState(null);
+    const [pin, setPin] = useState("");
 
-
-    // const { signUp } = useContext(AuthContext)
+    const axiossecure = useAxiosSecure();
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -36,61 +33,28 @@ const Login = () => {
         }
         console.log(userInfo)
 
-        // signUp(email, password)
-        //     .then((result) => {
-
-        //         const userInfo = {
-        //             email: result.user.email,
-        //             userName: name,
-        //             photoURL: photoURL,
-        //             role: selectedRole,
-        //             createdAt: result.user.metadata.createdAt,
-        //             lastLoginAt: result.user.metadata.lastLoginAt
-        //         }
-        //         // console.log(userInfo)
-        //         axiosPublic.post('/users', userInfo)
-        //             .then(res => {
-        //                 console.log(res.data);
-        //                 if (res.data.insertedId) {
-        //                     Swal.fire({
-        //                         position: 'top',
-        //                         icon: 'success',
-        //                         title: 'User created successfully.',
-        //                         showConfirmButton: false,
-        //                         timer: 1500
-        //                     });
-        //                 }
-        //             })
-
-        //         toast.success(
-        //             <>
-        //                 Account created succesfully
-        //                 <Link to="/login" className="btn btn-sm bg-slate-200 text-center font-medium text-green-500 hover:text-blue-500">
-        //                     <button className="">Log In
-        //                     </button>
-        //                 </Link>
-        //             </>
-        //         )
-        //         updateProfile(result.user,
-        //             {
-        //                 displayName: name,
-        //                 photoURL: photoURL
-        //             })
-        //         // sendEmailVerification(result.user)
-        //         // .then(toast.success("Verification email sent"))
-        //     })
-
-        //     .catch(error => {
-        //         if (error.code === "auth/email-already-in-use") {
-        //             toast.error("Email already in use")
-        //         }
-        //         else if (error.code === "auth/invalid-email") {
-        //             toast.error("Invalid email. Please provide a valid email")
-        //         }
-        //     }
-        //     )
-
-        toast.success('Registration successful! Please wait for admin approval.');
+        axiossecure.post('/login', userInfo)
+            .then((response) => {
+                console.log(response.data)
+                if (response.data.status === "success") {
+                    localStorage.setItem('access-token', response.data.token)
+                    localStorage.setItem('user', JSON.stringify(response.data.user))
+                    localStorage.setItem('role', response.data.user.role)
+                    if (response.data.user.role === 'admin') {
+                        navigate('/dashboard/admin-profile')
+                    } else if (response.data.user.role === 'agent') {
+                        navigate('/dashboard/agent-profile')
+                    } else {
+                        navigate('/dashboard/user-profile')
+                    }
+                } else {
+                    toast.error(response.data.message);
+                }
+            }
+            ).catch((error) => {
+                console.log(error)
+                toast.error("An error occured, please try again later");
+            })
 
         setEmailOrPhone("")
         setPin("")
