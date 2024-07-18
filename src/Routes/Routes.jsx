@@ -5,6 +5,21 @@ import HomePage from "../Pages/Home/HomePage";
 import Drawer from "@/Components/Drawer/Drawer";
 import SignUp from "@/Pages/SignUp/SignUp";
 import Login from "@/Pages/Login/Login";
+import PrivateRoute from "./PrivateRoute";
+import UserRoute from "./UserRoute";
+import UserProfile from "@/Pages/Dashboard/User/UserProfile";
+import UserTransactions from "@/Pages/Dashboard/User/UserTransactions";
+import SendMoney from "@/Pages/Dashboard/User/SendMoney";
+import CashOut from "@/Pages/Dashboard/User/CashOut";
+import CashIN from "@/Pages/Dashboard/User/CashIN";
+import AgentRoute from "./AgentRoute";
+import AgentProfile from "@/Pages/Dashboard/Agent/AgentProfile";
+import ManageTransaction from "@/Pages/Dashboard/Agent/ManageTransaction";
+import AgentTransactions from "@/Pages/Dashboard/Agent/AgentTransactions";
+import AdminRoute from "./AdminRoute";
+import AdminProfile from "@/Pages/Dashboard/Admin/AdminProfile";
+import ManageUsers from "@/Pages/Dashboard/Admin/ManageUsers";
+import AllTransactoons from "@/Pages/Dashboard/Admin/AllTransactoons";
 
 const router = createBrowserRouter([
     {
@@ -18,7 +33,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/login",
-                element: <Login/>
+                element: <Login />
             },
             {
                 path: "/register",
@@ -26,54 +41,58 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard",
-                element: <Drawer/>,
+                element: <PrivateRoute><Drawer /></PrivateRoute>,
                 children: [
                     // user related paths
                     {
                         path: "user-profile",
-                        element: <></>
+                        element: <UserRoute><UserProfile></UserProfile></UserRoute>
                     },
                     {
                         path: "user-transactions",
-                        element: <></>
+                        element: <UserRoute><UserTransactions></UserTransactions></UserRoute>
                     },
                     {
                         path: "send-money",
-                        element: <></>
+                        element: <UserRoute><SendMoney></SendMoney></UserRoute>
                     },
                     {
                         path: "cash-out",
-                        element: <></>
+                        element: <UserRoute><CashOut></CashOut></UserRoute>
                     },
                     {
                         path: "cash-in",
-                        element: <></>
+                        element: <UserRoute><CashIN></CashIN></UserRoute>
+                    },
+                    {
+                        path: "user-transactions",
+                        element: <UserRoute><UserTransactions></UserTransactions></UserRoute>
                     },
                     // Agent related paths
                     {
                         path: "agent-profile",
-                        element: <></> // Missing element property fixed
+                        element: <AgentRoute><AgentProfile></AgentProfile></AgentRoute>
                     },
                     {
                         path: "manage-transaction",
-                        element: <></>
+                        element: <AgentRoute><ManageTransaction></ManageTransaction></AgentRoute>
                     },
                     {
                         path: "agent-transactions",
-                        element: <></>
+                        element: <AgentRoute><AgentTransactions></AgentTransactions></AgentRoute>
                     },
                     // Admin related paths
                     {
                         path: "admin-profile",
-                        element: <></>
+                        element: <AdminRoute><AdminProfile></AdminProfile></AdminRoute>
                     },
                     {
                         path: "manage-users",
-                        element: <></>
+                        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
                     },
                     {
                         path: "all-transactions",
-                        element: <></>
+                        element: <AdminRoute><AllTransactoons></AllTransactoons></AdminRoute>
                     }
                 ]
             },

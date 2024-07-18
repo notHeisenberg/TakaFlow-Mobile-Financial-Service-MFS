@@ -11,8 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 
+
 import Swal from "sweetalert2";
 import useAxiosSecure from "@/Utilities/useAxiosSecure";
+
 
 
 const Login = () => {
@@ -31,14 +33,24 @@ const Login = () => {
             emailOrPhone: emailOrPhone,
             pin: parseInt(pin),
         }
-        // console.log(userInfo)
 
+        localStorage.setItem('loading', true);
         axiossecure.post('/login', userInfo)
             .then((response) => {
                 // console.log(response.data)
+
                 if (response.data.status === "success") {
                     localStorage.setItem('access-token', response.data.token)
                     localStorage.setItem('user', JSON.stringify(response.data.user))
+
+                    Swal.fire({
+                        title: 'Success',
+                        text: response.data.message,
+                        icon: 'success',
+                        timer: 2000,
+                        confirmButtonText: 'Ok'
+                    })
+
                     if (response.data.user.role === 'admin') {
                         navigate('/dashboard/admin-profile')
                     } else if (response.data.user.role === 'agent') {
@@ -51,15 +63,15 @@ const Login = () => {
                 }
             }
             ).catch((error) => {
-                console.log(error)
-                toast.error("An error occured, please try again later");
+                // console.log(error)
+                localStorage.setItem('loading', false);
+                toast.error(error.response.data.message);
+            }).finally(() => {
+                localStorage.setItem('loading', false);
             })
 
         setEmailOrPhone("")
         setPin("")
-
-
-
     };
 
     return (
@@ -129,7 +141,7 @@ const Login = () => {
                     </form>
                     {/* <Link className="text-center btn bg-green-500 text-black" to={"/"}> Go Home</Link> */}
                 </Card>
-            </div>
+            </div >
             <ToastContainer />
 
         </>

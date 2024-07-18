@@ -7,77 +7,85 @@ const Drawer = () => {
     const active = "bg-blue-400 text-yellow-300 font-xl border border-blue-400";
     const inactive = "text-blue-400 hover:bg-blue-400 hover:text-yellow-300";
 
+    const user = localStorage.getItem('user');
     const userType = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).role : "";
 
     const dashboardItems = <>
-        <ul className="menu bg-inherit min-h-full w-80 h-screen p-4">
-            <li>
-                <NavLink to={`/dashboard/${userType}-profile`} className={({ isActive }) => isActive ? active : inactive}>
-                    {userType === "user" ? "User" : userType === "agent" ? "Agent" : "Admin"} Profile
-                </NavLink>
-            </li>
+        {user &&
+            <ul className="menu bg-inherit min-h-full w-80 h-screen p-4">
+                <li>
+                    <NavLink to={`/dashboard/${userType}-profile`} className={({ isActive }) => isActive ? active : inactive}>
+                        {userType === "user" ? "User" : userType === "agent" ? "Agent" : "Admin"} Profile
+                    </NavLink>
+                </li>
 
-            {/*  Normal user Routes */}
-            {userType === "user" &&
-                <>
-                    <li>
-                        <NavLink to={`/dashboard/send-money`} className={({ isActive }) => isActive ? active : inactive}>
-                            Send money
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={`/dashboard/cash-out`} className={({ isActive }) => isActive ? active : inactive}>
-                            Cash out
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={`/dashboard/cash-in`} className={({ isActive }) => isActive ? active : inactive}>
-                            Cash in
-                        </NavLink>
-                    </li>
-                </>
-            }
-            {/* Agent specific routes */}
-            {
-                userType === "agent" && <>
-                    <li>
-                        <NavLink to={`/dashboard/manage-transaction`} className={({ isActive }) => isActive ? active : inactive}>
-                            Manage transactions
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={`/dashboard/agent-transactions`} className={({ isActive }) => isActive ? active : inactive}>
-                            Agent transactions
-                        </NavLink>
-                    </li>
-                </>
-            }
-            {/* Admin specific routes */}
-            {
-                userType === "admin" && <>
-                    <li>
-                        <NavLink to={`/dashboard/manage-users`} className={({ isActive }) => isActive ? active : inactive}>
-                            Manage users
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={`/dashboard/all-transactions`} className={({ isActive }) => isActive ? active : inactive}>
-                            All transactions
-                        </NavLink>
-                    </li>
-                </>
-            }
-            <li>
-                <NavLink to={`/`} className="text-green-500 font-bold hover:bg-green-400 hover:text-yellow-300">
-                    Home
-                </NavLink>
-            </li>
-            <li>
-                <NavLink to={`/logout`} onClick={() => logout()} className="text-red-400 font-bold hover:bg-red-400 hover:text-yellow-300">
-                    Logout
-                </NavLink>
-            </li>
-        </ul>
+                {/*  Normal user Routes */}
+                {userType === "user" &&
+                    <>
+                        <li>
+                            <NavLink to={`/dashboard/send-money`} className={({ isActive }) => isActive ? active : inactive}>
+                                Send money
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={`/dashboard/cash-out`} className={({ isActive }) => isActive ? active : inactive}>
+                                Cash out
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={`/dashboard/cash-in`} className={({ isActive }) => isActive ? active : inactive}>
+                                Cash in
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={`/dashboard/user-transactions`} className={({ isActive }) => isActive ? active : inactive}>
+                                My transactions
+                            </NavLink>
+                        </li>
+                    </>
+                }
+                {/* Agent specific routes */}
+                {
+                    userType === "agent" && <>
+                        <li>
+                            <NavLink to={`/dashboard/manage-transaction`} className={({ isActive }) => isActive ? active : inactive}>
+                                Manage transactions
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={`/dashboard/agent-transactions`} className={({ isActive }) => isActive ? active : inactive}>
+                                My transactions
+                            </NavLink>
+                        </li>
+                    </>
+                }
+                {/* Admin specific routes */}
+                {
+                    userType === "admin" && <>
+                        <li>
+                            <NavLink to={`/dashboard/manage-users`} className={({ isActive }) => isActive ? active : inactive}>
+                                Manage users
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={`/dashboard/all-transactions`} className={({ isActive }) => isActive ? active : inactive}>
+                                All transactions
+                            </NavLink>
+                        </li>
+                    </>
+                }
+                <li>
+                    <NavLink to={`/`} className="text-green-500 font-bold hover:bg-green-400 hover:text-yellow-300">
+                        Home
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to={`/logout`} onClick={() => logout()} className="text-red-400 font-bold hover:bg-red-400 hover:text-yellow-300">
+                        Logout
+                    </NavLink>
+                </li>
+            </ul>
+        }
     </>
 
     return (
