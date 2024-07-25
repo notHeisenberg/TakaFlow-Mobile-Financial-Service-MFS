@@ -6,7 +6,7 @@ const Navbar = () => {
     const userType = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).role : "";
     const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
     return (
-        <div className="navbar bg-state-300 border-b shadow-lg">
+        <div className="navbar bg-gray-300 border-b shadow-lg">
             <div className="flex-1">
                 <Link to={"/"} className="btn btn-ghost text-xl text-red-500">EasyTaka</Link>
             </div>
@@ -18,7 +18,7 @@ const Navbar = () => {
                                 <img
                                     className="rounded-full w-full h-full"
                                     alt="Tailwind CSS Navbar component"
-                                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    src={user.photoUrl} />
                             </div>
                         </div>
                         <ul

@@ -24,9 +24,11 @@ const useAxiosSecure = () => {
     axiosSecure.interceptors.response.use(function (response) {
         return response;
     }, async (error) => {
-        const status = error.response ? error.response.status : null;
-        if (status === 401 || status === 403) {
+
+        // console.log('error stopped by interceptors', error.response.status)
+        if (error.response.status === 401 || error.response.status === 403) {
             localStorage.removeItem('access-token');
+            localStorage.removeItem('user');
             navigate('/login');
         }
         return Promise.reject(error);
