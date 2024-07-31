@@ -108,7 +108,7 @@ const Drawer = () => {
                     userType !== "admin" &&
                     <li className='absolute bottom-2 left-20 z-10 text-lg border-deep-purple-500 rounded-xl badge badge-warning p-5'>
                         Balance: {""}
-                        {liveUser?.user?.balance}৳
+                        {parseFloat(liveUser?.user?.balance).toFixed(2)}৳
                     </li>
                 }
             </ul>

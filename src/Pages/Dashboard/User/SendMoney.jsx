@@ -66,6 +66,7 @@ const SendMoney = () => {
                 setPin('');
             }
             setTimeout(() => {
+                localStorage.setItem('user', JSON.stringify(response.data));
                 window.location.reload();
             }, 3000);
         } catch (error) {
@@ -126,8 +127,8 @@ const SendMoney = () => {
                         <h1 className="text-2xl font-semibold text-red-500">Your account is blocked. Please contact the admin</h1>
                     </div>
                     :
-                    <div className="container mx-auto my-10 p-5">
-                        <form className="bg-white shadow-md rounded p-10">
+                    <div className="container mx-auto my-10 rounded p-10 bg-lime-300 shadow-xl shadow-green-200 md:w-1/2">
+                        <form className="text-xl font-semibold mb-4">
                             <h2 className="text-2xl font-semibold mb-4">Send Money</h2>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Amount:</label>
